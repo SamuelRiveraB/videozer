@@ -37,17 +37,23 @@ video.addEventListener('ended', showPlayIcon)
 function displayTime(time) {
     const minutes = Math.floor(time / 60)
     let seconds = Math.floor(time % 60)
-    console.log(minutes, seconds)
     seconds = seconds<10? seconds = `0${seconds}`: seconds
     return `${minutes}:${seconds}`
 }
 
 function updateProgress() {
+    playBtn.classList.replace('fa-play', 'fa-pause')
+    playBtn.title = 'Pause'
     progressBar.style.width = `${video.currentTime/video.duration * 100}%`
     displayTime(video.duration)
-    console.log(video.duration)
     currentTime.textContent = `${displayTime(video.currentTime)} / `
     duration.textContent = `${displayTime(video.duration)}`
+}
+
+function setProgress(e) {
+    const newTime = e.offsetX / progressRange.offsetWidth 
+    progressBar.style.width = `${newTime * 100}%`
+    video.currentTime = newTime * video.duration
 }
 
 // Volume Controls --------------------------- //
@@ -66,3 +72,5 @@ playBtn.addEventListener('click', togglePlay)
 video.addEventListener('click', togglePlay)
 video.addEventListener('timeupdate', updateProgress)
 video.addEventListener('canplay', showPlayIcon)
+progressRange.addEventListener('click', setProgress)
+
